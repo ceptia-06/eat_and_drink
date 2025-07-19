@@ -58,24 +58,36 @@ class ProductController extends Controller
     /**
      * Affiche le formulaire pour éditer un produit existant.
      */
-    public function edit(Product $product)
+    public function edit(Product $produit)
     {
-        // Sécurité : Vérifier que le produit appartient bien au stand de l'utilisateur connecté
-        if ($product->stand_id !== Auth::user()->stand->id) {
+        
+
+
+        // Le code de sécurité en dessous ne sera PAS exécuté pour l'instant
+        $stand = Auth::user()->stand;
+
+
+        // VÉRIFICATION 1 : L'utilisateur a-t-il seulement un stand ?
+        if (!$stand) {
+            abort(403, 'Vous devez avoir un stand pour modifier des produits.');
+        }
+
+        // VÉRIFICATION 2 : Le produit appartient-il bien à SON stand ?
+        if ($produit->stand_id !== $stand->id) {
             abort(403, 'Action non autorisée.');
         }
 
-        return view('products.edit', compact('product'));
+        return view('products.edit', compact('produit'));
     }
 
     /**
      * Met à jour un produit existant.
      */
-    public function update(Request $request, Product $product)
-    {
-        // Même validation et sécurité que pour edit/store
-        if ($product->stand_id !== Auth::user()->stand->id) {
-            abort(403);
+        public function update(Request $request, Product $produit)    {
+        $stand = Auth::user()->stand;
+
+        if (!$stand || $produit->stand_id !== $stand->id) {
+            abort(403, 'Action non autorisée.');
         }
 
         $request->validate([
@@ -84,7 +96,7 @@ class ProductController extends Controller
             'prix' => 'required|numeric|min:0',
         ]);
 
-        $product->update($request->all());
+        $produit->update($request->all());
 
         return redirect()->route('produits.index')->with('success', 'Produit mis à jour avec succès !');
     }
@@ -92,13 +104,14 @@ class ProductController extends Controller
     /**
      * Supprime un produit.
      */
-    public function destroy(Product $product)
-    {
-        if ($product->stand_id !== Auth::user()->stand->id) {
-            abort(403);
+    public function destroy(Product $produit)    {
+        $stand = Auth::user()->stand;
+
+        if (!$stand || $produit->stand_id !== $stand->id) {
+            abort(403, 'Action non autorisée.');
         }
 
-        $product->delete();
+        $produit->delete();
 
         return redirect()->route('produits.index')->with('success', 'Produit supprimé avec succès.');
     }

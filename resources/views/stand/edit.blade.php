@@ -1,35 +1,31 @@
-<!-- Fichier: resources/views/stand/edit.blade.php -->
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             Gestion de mon Stand
         </h2>
     </x-slot>
-    <div class="py-12">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-
-            <div class="mb-4">
-                <a href="{{ route('produits.index') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase hover:bg-blue-500">
-                    Gérer mes produits →
-                </a>
-            </div>
-
-            @if(session('success'))
-
 
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             
+            <div class="mb-4">
+               <a href="{{ route('produits.index') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase hover:bg-blue-500">
+                   Gérer mes produits →
+               </a>
+            </div>
+            
+            <!-- BLOC DE CONDITION CORRIGÉ -->
             @if(session('success'))
                 <div class="mb-4 p-4 bg-green-100 text-green-700 border border-green-400 rounded">
                     {{ session('success') }}
                 </div>
-            @endif
+            @endif  <!-- <--- LA LIGNE MAGIQUE À AJOUTER -->
+            <!-- FIN DU BLOC -->
 
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <form action="{{ route('stand.update') }}" method="POST">
-                        @csrf <!-- Sécurité Laravel obligatoire -->
+                        @csrf 
 
                         <!-- Nom du Stand -->
                         <div>
