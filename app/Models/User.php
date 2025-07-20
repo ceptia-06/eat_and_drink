@@ -19,6 +19,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'nom_entreprise',
         'email',
         'password',
     ];
@@ -45,4 +46,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function stand()
+    {
+        return $this->hasOne(Stand::class);
+    }
+    
 }
