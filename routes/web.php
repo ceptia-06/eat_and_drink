@@ -11,6 +11,7 @@ use App\Http\Controllers\CartController;
 
 
 
+
 Route::get('/', [PublicController::class, 'home'])->name('home');
 Route::get('/exposants', [PublicController::class, 'index'])->name('exposants.index');
 Route::get('/exposants/{stand}', [PublicController::class, 'show'])->name('exposants.show');
@@ -19,10 +20,6 @@ Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.a
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/remove/{product}', [CartController::class, 'remove'])->name('cart.remove');
 Route::post('/checkout', [CartController::class, 'checkout'])->name('checkout');
-
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -40,6 +37,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/users/{user}/approve', [UserController::class, 'approve'])->name('users.approve');
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
 });
 
 Route::middleware(['auth', 'role:entrepreneur_approuve'])->group(function () {
